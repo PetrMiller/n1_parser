@@ -45,7 +45,6 @@ async def scrape_n1():
                     await page.goto(link, timeout=60000, wait_until='domcontentloaded')
                     logging.info(f"Открыта страница объявления: {link}")
 
-                    # Извлечение информации об объявлении
                     try:
                         price = await page.text_content('span.price', timeout=60000)
                         price = price.strip() if price else "Цена не указана"
