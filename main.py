@@ -2,7 +2,6 @@ import asyncio
 import logging
 from playwright.async_api import async_playwright, TimeoutError as PlaywrightTimeoutError
 
-# Настройка логирования
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s [%(levelname)s] %(message)s',
@@ -18,7 +17,6 @@ async def scrape_n1():
         browser = await p.chromium.launch(headless=False)
         page = await browser.new_page()
 
-        # Переход на страницу объявлений
         url = "https://novosibirsk.n1.ru/kupit/kvartiry/rooms-trehkomnatnye/?price_min=3000000"
         try:
             await page.goto(url, timeout=60000, wait_until='domcontentloaded')
@@ -28,7 +26,6 @@ async def scrape_n1():
             await browser.close()
             return
 
-        # Извлечение ссылок на первые 10 объявлений
         try:
             await page.wait_for_selector('a.link', timeout=10000)
             links = await page.evaluate('''() => {
@@ -48,7 +45,6 @@ async def scrape_n1():
                     await page.goto(link, timeout=60000, wait_until='domcontentloaded')
                     logging.info(f"Открыта страница объявления: {link}")
 
-                    # Извлечение информации об объявлении
                     try:
                         price = await page.text_content('span.price', timeout=60000)
                         price = price.strip() if price else "Цена не указана"
@@ -77,7 +73,6 @@ async def scrape_n1():
                         logging.error("Ошибка при извлечении адреса: Элемент не найден")
                         address = "Ошибка извлечения адреса"
 
-                    # Запись данных в файл
                     file.write(f"Ссылка: {link}\n")
                     file.write(f"Цена: {price}\n")
                     file.write(f"Описание: {description}\n")
@@ -92,5 +87,4 @@ async def scrape_n1():
         await browser.close()
         logging.info("Данные сохранены в файл listings.txt")
 
-# Запуск скрипта
 asyncio.run(scrape_n1())
