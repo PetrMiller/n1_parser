@@ -4,8 +4,7 @@ pip install -r requirements.txt
 
 2) Установка Playwright
 
-pip install playwright, 
-playwright install
+pip install playwright
 
 3) Запуск скрипта
 
