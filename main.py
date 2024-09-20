@@ -67,7 +67,7 @@ async def scrape_n1():
                         phone = "Ошибка извлечения телефона"
 
                     try:
-                        address = await page.text_content('span.offer-card-address__address', timeout=60000)
+                        address = await page.text_content('.card-living-content-params__col._last .ui-kit-link__inner', timeout=60000)
                         address = address.strip() if address else "Адрес не указан"
                     except PlaywrightTimeoutError:
                         logging.error("Ошибка при извлечении адреса: Элемент не найден")
